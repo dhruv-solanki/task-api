@@ -1,8 +1,10 @@
 package com.dhruv.task.mapper.impl;
 
 import com.dhruv.task.domain.CreateTaskRequest;
+import com.dhruv.task.domain.UpdateTaskRequest;
 import com.dhruv.task.domain.dto.CreateTaskRequestDto;
 import com.dhruv.task.domain.dto.TaskDto;
+import com.dhruv.task.domain.dto.UpdateTaskRequestDto;
 import com.dhruv.task.domain.entity.Task;
 import com.dhruv.task.mapper.TaskMapper;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,17 @@ public class TaskMapperImpl implements TaskMapper {
             dto.title(),
             dto.description(),
             dto.dueDate(),
+            dto.priority()
+        );
+    }
+
+    @Override
+    public UpdateTaskRequest fromDto(UpdateTaskRequestDto dto) {
+        return new UpdateTaskRequest(
+            dto.title(),
+            dto.description(),
+            dto.dueDate(),
+            dto.status(),
             dto.priority()
         );
     }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.UUID;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -21,5 +23,13 @@ public class GlobalExceptionHandler {
 
         ErrorDto errorDto = new ErrorDto(errorMessage);
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleTaskNotFoundException(TaskNotFoundException ex) {
+        UUID id = ex.getId();
+        String errorMessage = String.format("Task with ID %s not found", id);
+        ErrorDto errorDto = new ErrorDto(errorMessage);
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 }

@@ -1,8 +1,10 @@
 package com.dhruv.task.controller;
 
 import com.dhruv.task.domain.CreateTaskRequest;
+import com.dhruv.task.domain.UpdateTaskRequest;
 import com.dhruv.task.domain.dto.CreateTaskRequestDto;
 import com.dhruv.task.domain.dto.TaskDto;
+import com.dhruv.task.domain.dto.UpdateTaskRequestDto;
 import com.dhruv.task.domain.entity.Task;
 import com.dhruv.task.mapper.TaskMapper;
 import com.dhruv.task.service.TaskService;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(name = "/api/tasks")
@@ -38,6 +41,23 @@ public class TaskController {
     public ResponseEntity<List<TaskDto>> listTasks() {
         List<Task> tasks = taskService.listTasks();
         List<TaskDto> taskDtos = tasks.stream().map(taskMapper::toDto).toList();
-        return new ResponseEntity<>(taskDtos, HttpStatus.OK);
+        return ResponseEntity.ok(taskDtos);
+    }
+
+    @PutMapping(path = "/{taskId}")
+    public ResponseEntity<TaskDto> updateTask(
+        @PathVariable UUID taskId,
+        @Valid @RequestBody UpdateTaskRequestDto updateTaskRequestDto
+    ) {
+        UpdateTaskRequest updateTaskRequest = taskMapper.fromDto(updateTaskRequestDto);
+        Task task = taskService.updateTask(taskId, updateTaskRequest);
+        TaskDto taskDto = taskMapper.toDto(task);
+        return ResponseEntity.ok(taskDto);
+    }
+
+    @DeleteMapping(path = "/{taskId")
+    public ResponseEntity<Void> deleteTask(@PathVariable UUID taskId) {
+        taskService.deleteTask(taskId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
