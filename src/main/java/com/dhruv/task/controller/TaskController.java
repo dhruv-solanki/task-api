@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(name = "/api/tasks")
+@RequestMapping(path = "/api/tasks")
 public class TaskController {
     private final TaskService taskService;
     private final TaskMapper taskMapper;
@@ -55,7 +55,7 @@ public class TaskController {
         return ResponseEntity.ok(taskDto);
     }
 
-    @DeleteMapping(path = "/{taskId")
+    @DeleteMapping(path = "/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID taskId) {
         taskService.deleteTask(taskId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
